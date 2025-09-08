@@ -82,8 +82,8 @@ const [modal,setModal]=useState<{
   </a>
       </div>
     </div>
-    <div className="flex ml-50 mb-20 text-3xl">
-      <section className="flex-1 basis-0">
+    <div className="flex ml-50 mb-20 text-3xl gap-150">
+      <section>
       <h2 className="mb-5">Skills</h2>
       <div className="flex gap-4 w-10 h-10">
             <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/html5/html5-original.svg" />
@@ -97,7 +97,7 @@ const [modal,setModal]=useState<{
             <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/nextjs/nextjs-original.svg" />
             </div>
             </section>
-            <section className="flex-1 basis-0 ml-15">
+            <section>
     <h2 className="mb-5">Tools</h2>
     <div className="flex gap-4 w-10 h-10">      
             <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/notion/notion-original.svg" />            
@@ -108,9 +108,9 @@ const [modal,setModal]=useState<{
     <div className="ml-50 text-3xl">
       <h2>PROJECT</h2>
     </div>
-    <div className="flex flex-wrap ml-50 gap-10 w-full text-xl mb-10">
+    <div className="flex flex-wrap pl-50 gap-10 w-full text-xl mb-10">
       <div className="hover:cursor-pointer flex flex-col shrink-0  p-4 mt-5 3xl:w-[350px] w-[250px] h-[350px] bg-emerald-100 rounded-lg"
-            onClick={()=>//🌟🌟🌟3xl 커스텀스크린 정의필요🌟🌟🌟
+            onClick={()=>
               setModal({
                 open:true,
                 imageSrc:"/growengup.png",
