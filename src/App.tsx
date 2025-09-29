@@ -22,7 +22,10 @@ function ProjectCard({
 }: ProjectCardProps) {
   return (
     <div
-      className={`ml-27 hover:scale-[1.02] transition-transform shadow-[6px_6px_15px_rgba(0,0,0,0.3)] hover:shadow-[8px_8px_20px_rgba(0,0,0,0.45)] flex flex-col shrink-0 p-4 mt-5 w-[300px] h-[350px] rounded-lg ${bgColor}`}
+      className={`ml-27 hover:scale-[1.02] transition-transform 
+shadow-[6px_6px_15px_rgba(0,0,0,0.3)] hover:shadow-[8px_8px_20px_rgba(0,0,0,0.45)] 
+border-2 border-emerald-400/40
+flex flex-col shrink-0 p-4 mt-5 w-[300px] h-[350px] rounded-lg ${bgColor}`}
       onClick={onClick}
     >
       <h3 className="font-bold text-lg mb-2">{title}</h3>
