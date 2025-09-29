@@ -115,7 +115,7 @@ function App() {
   const projects = [
     {
       title: "영어 회화 학습 서비스",
-      desc: "😀 FE 3명\n🫡 기여: 퍼블리싱, 콘텐츠 제작",
+      desc: "😀 FE 2명, BE 1명\n🫡 기여: 퍼블리싱, 콘텐츠 제작",
       link: "https://growengup.com/home.php",
       imageSrc: "/growengup.png",
       tech: [
