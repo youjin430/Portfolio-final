@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { createPortal } from "react-dom";
 import "./App.css";
 
 // 🧭 프로젝트 카드 컴포넌트
@@ -46,17 +47,21 @@ flex flex-col shrink-0 p-4 mt-5 w-[300px] h-[350px] rounded-lg ${bgColor}`}
   );
 }
 
-// 🪄 Modal
+// 🪄 Modal (포털 + 오버레이 추가)
 function Modal({
   open,
   onClose,
   imageSrc,
   link,
+  title,
+  desc,
 }: {
   open: boolean;
   onClose: () => void;
   imageSrc: string;
   link: string;
+  title: string;
+  desc: string;
 }) {
   useEffect(() => {
     if (!open) return;
@@ -72,36 +77,58 @@ function Modal({
 
   if (!open) return null;
 
-  return (
+  return createPortal(
     <div
-      className="fixed inset-0 z-[999] flex items-center justify-center bg-black/30"
+      className="fixed inset-0 z-[9999] bg-black/40 backdrop-blur-sm flex items-center justify-center p-4"
       onClick={onClose}
+      role="dialog"
+      aria-modal
     >
       <div
-        className="relative w-full max-w-[760px]"
+        className="relative w-[92vw] max-w-[560px] min-h-[70vh] max-h-[90vh]
+                   bg-white rounded-2xl shadow-[0_10px_40px_rgba(0,0,0,0.35)]
+                   border border-black/10 overflow-hidden"
         onClick={(e) => e.stopPropagation()}
       >
+        {/* 닫기 버튼 */}
         <button
-          className="absolute top-3 right-3 z-50 outline-none"
+          className="absolute top-3 right-3 w-8 h-8 grid place-items-center
+                     rounded-full text-gray-500 hover:text-black hover:bg-black/5"
           onClick={onClose}
+          aria-label="close"
         >
           ✕
         </button>
-        <img src={imageSrc} />
-        {link && (
-          <div className="absolute bottom-4 left-0 right-0 flex justify-center">
+
+        {/* 1) 상단 이미지 */}
+        <div className="relative h-[220px]">
+          <img src={imageSrc} alt="" className="w-full h-full object-cover" />
+        </div>
+
+        {/* 2) 본문(설명/상세/기능) */}
+        <div className="p-6 space-y-5">
+          <h2 className="text-xl md:text-2xl font-semibold">{title}</h2>
+
+          <section>
+            <h3 className="font-semibold mb-1">프로젝트 설명</h3>
+            <p className="text-gray-700 whitespace-pre-line">{desc}</p>
+          </section>
+
+          {link && (
             <a
               href={link}
               target="_blank"
               rel="noopener noreferrer"
-              className="px-4 py-2 rounded-lg bg-white/90 hover:bg-white font-semibold shadow-lg transition"
+              className="inline-flex items-center gap-2 px-3 py-2 rounded-lg
+                         bg-black/5 hover:bg-black/10 transition"
             >
-              🔗 {link}
+              🔗 사이트 바로가기
             </a>
-          </div>
-        )}
+          )}
+        </div>
       </div>
-    </div>
+    </div>,
+    document.body
   );
 }
 
@@ -110,7 +137,9 @@ function App() {
     open: boolean;
     imageSrc: string;
     link: string;
-  }>({ open: false, imageSrc: "", link: "" });
+    title: string;
+    desc: string;
+  }>({ open: false, imageSrc: "", link: "", title: "", desc: "" });
 
   const projects = [
     {
@@ -153,7 +182,8 @@ function App() {
     },
     {
       title: "AI 기반 여가생활 추천 서비스",
-      desc: "😀 FE 4명, BE 5명\n🫡 기여: 챗봇 추천, 행사/모임 페이지(검색,필터링,정렬,추천)\n\n🌟 백엔드 리소스 종료로 실서비스 중단(2025.08)",
+      desc:
+        "😀 FE 4명, BE 5명\n🫡 기여: 챗봇 추천, 행사/모임 페이지(검색,필터링,정렬,추천)\n\n🌟 백엔드 리소스 종료로 실서비스 중단(2025.08)",
       link: "https://funfunhage.vercel.app/",
       imageSrc: "/funfun.png",
       tech: [
@@ -169,15 +199,15 @@ function App() {
 
   return (
     <>
-      {/* 🧍‍♀️ 소개 섹션 */}
+      {/* 🧍‍♀️ 소개 섹션 (생략 가능) */}
       <div className="ml-26 flex flex-col md:flex-row items-center px-6 md:px-12 min-h-screen gap-8">
-        <img
-          src="/유진.png"
-          className="w-[200px] md:w-[250px]"
-        />
+        <img src="/유진.png" className="w-[200px] md:w-[250px]" />
         <div className="flex flex-col items-start text-center md:text-left">
           <h1 className="text-3xl md:text-5xl font-bold leading-snug">
-            안녕하세요,<br />프론트엔드 개발자<br />심유진입니다.
+            안녕하세요,<br />
+            프론트엔드 개발자
+            <br />
+            심유진입니다.
           </h1>
           <a
             href="https://github.com/youjin430"
@@ -221,6 +251,10 @@ function App() {
 
       {/* 🧱 Projects */}
       <div className="ml-26 px-6 md:px-12 text-3xl font-bold mb-5">Project</div>
+      <p className="ml-26 px-6 md:px-12 text-base md:text-lg text-gray-600 mb-4">
+        카드를 눌러서 프로젝트의 세부사항을 확인해보세요
+      </p>
+
       <div className="flex flex-wrap px-6 md:px-12 gap-8 mb-15 justify-center md:justify-start">
         {projects.map((p) => (
           <ProjectCard
@@ -236,6 +270,8 @@ function App() {
                 open: true,
                 imageSrc: p.imageSrc,
                 link: p.link,
+                title: p.title,
+                desc: p.desc,
               })
             }
           />
@@ -247,6 +283,8 @@ function App() {
         onClose={() => setModal((m) => ({ ...m, open: false }))}
         imageSrc={modal.imageSrc}
         link={modal.link}
+        title={modal.title}
+        desc={modal.desc}
       />
     </>
   );
