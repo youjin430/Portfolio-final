@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, type ReactNode } from "react";
 import { createPortal } from "react-dom";
 import "./App.css";
 
@@ -53,8 +53,9 @@ function Modal({
   onClose,
   imageSrc,
   link,
-  title,
-  desc,
+  // title,
+  // desc,
+  detail,
 }: {
   open: boolean;
   onClose: () => void;
@@ -62,6 +63,7 @@ function Modal({
   link: string;
   title: string;
   desc: string;
+  detail:ReactNode;
 }) {
   useEffect(() => {
     if (!open) return;
@@ -106,20 +108,25 @@ function Modal({
         </div>
 
         {/* 2) 본문(설명/상세/기능) */}
-        <div className="p-6 space-y-5">
-          <h2 className="text-xl md:text-2xl font-semibold">{title}</h2>
-
-          <section>
-            <h3 className="font-semibold mb-1">프로젝트 설명</h3>
-            <p className="text-gray-700 whitespace-pre-line">{desc}</p>
-          </section>
+        <div className="p-6 space-y-1">
+          <h2 className="text-xl md:text-2xl">프로젝트 설명</h2>
+          {detail}
+          {/* <section>
+            <h3 className="mb-5">영어 회화 학습을 돕는 웹 기반 서비스</h3>
+            <p className="text-gray-700 whitespace-pre-line">상세내용</p>
+            <ol className="list-decimal list-inside text-gray-700 mt-2 space-y-1">
+    <li>반응형 UI 퍼블리싱 담당</li>
+    <li>Vanilla JavaScript를 활용한 정적 페이지 구현</li>
+    <li>AI 기반 학습 영상 콘텐츠 제작</li>
+  </ol>
+          </section> */}
 
           {link && (
             <a
               href={link}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 px-3 py-2 rounded-lg
+              className="mt-4 inline-flex items-center gap-2 px-3 py-2 rounded-lg
                          bg-black/5 hover:bg-black/10 transition"
             >
               🔗 사이트 바로가기
@@ -139,7 +146,8 @@ function App() {
     link: string;
     title: string;
     desc: string;
-  }>({ open: false, imageSrc: "", link: "", title: "", desc: "" });
+    detail: ReactNode | null;
+  }>({ open: false, imageSrc: "", link: "", title: "", desc: "",detail: null, });
 
   const projects = [
     {
@@ -153,6 +161,17 @@ function App() {
         "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/javascript/javascript-original.svg",
       ],
       bgColor: "bg-emerald-100",
+      detail: (
+      <>
+        <h3 className="mb-5">영어 회화 학습을 돕는 웹 기반 서비스</h3>
+        <p className="text-gray-700 whitespace-pre-line">상세내용</p>
+        <ol className="list-decimal list-inside text-gray-700 mt-2 space-y-1">
+          <li>반응형 UI 퍼블리싱 담당</li>
+          <li>Vanilla JavaScript를 활용한 정적 페이지 구현</li>
+          <li>AI 기반 학습 영상 콘텐츠 제작</li>
+        </ol>
+      </>
+    ),
     },
     {
       title: "여행 일정 공유 커뮤니티",
@@ -166,6 +185,17 @@ function App() {
         "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/zustand/zustand-original.svg",
       ],
       bgColor: "bg-emerald-200",
+      detail: (
+      <>
+        <h3 className="mb-5">여행 일정을 공유하고 검색할 수 있는 커뮤니티</h3>
+        <p className="text-gray-700 whitespace-pre-line">상세내용</p>
+        <ol className="list-decimal list-inside text-gray-700 mt-2 space-y-1">
+          <li>마이페이지 UI/UX 구현</li>
+          <li>검색 및 알림 기능 개발</li>
+          <li>React + Zustand 상태관리 적용</li>
+        </ol>
+      </>
+    ),
     },
     {
       title: "캠핑 통합 플랫폼",
@@ -179,6 +209,17 @@ function App() {
         "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/zustand/zustand-original.svg",
       ],
       bgColor: "bg-emerald-100",
+      detail: (
+      <>
+        <h3 className="mb-5">캠핑 정보를 모아 보고 예약까지 한 번에</h3>
+        <p className="text-gray-700 whitespace-pre-line">상세내용</p>
+        <ol className="list-decimal list-inside text-gray-700 mt-2 space-y-1">
+          <li>Google OAuth 로그인 연동</li>
+          <li>헤더 검색 · 필터링 UX 최적화</li>
+          <li>챗봇 FAQ/가이드 플로우 구현</li>
+        </ol>
+      </>
+    ),
     },
     {
       title: "AI 기반 여가생활 추천 서비스",
@@ -194,6 +235,17 @@ function App() {
         "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/nextjs/nextjs-original.svg",
       ],
       bgColor: "bg-emerald-200",
+      detail: (
+      <>
+        <h3 className="mb-5">취향 기반 AI 여가 추천 & 이벤트 탐색</h3>
+        <p className="text-gray-700 whitespace-pre-line">상세내용</p>
+        <ol className="list-decimal list-inside text-gray-700 mt-2 space-y-1">
+          <li>프롬프트 설계로 챗봇 추천 정밀도 개선</li>
+          <li>행사/모임 목록 검색·필터·정렬 구현</li>
+          <li>추천 배치/캐시 전략으로 UX 지연 감소</li>
+        </ol>
+      </>
+    ),
     },
   ];
 
@@ -272,6 +324,7 @@ function App() {
                 link: p.link,
                 title: p.title,
                 desc: p.desc,
+                detail: p.detail,
               })
             }
           />
@@ -285,6 +338,7 @@ function App() {
         link={modal.link}
         title={modal.title}
         desc={modal.desc}
+        detail={modal.detail}
       />
     </>
   );
