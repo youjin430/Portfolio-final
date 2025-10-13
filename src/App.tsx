@@ -87,7 +87,7 @@ function Modal({
       aria-modal
     >
       <div
-        className="relative w-[92vw] max-w-[560px] min-h-[70vh] max-h-[90vh]
+        className="relative w-[92vw] max-w-[800px] min-h-[70vh] max-h-[90vh]
                    bg-white rounded-2xl shadow-[0_10px_40px_rgba(0,0,0,0.35)]
                    border border-black/10 flex flex-col"
         onClick={(e) => e.stopPropagation()}
@@ -325,7 +325,7 @@ function App() {
         <div className="flex flex-col items-start text-center md:text-left">
           <h1 className="text-3xl md:text-5xl font-bold leading-snug">
             안녕하세요,<br />
-            프론트엔드 개발자
+            성장하는 프론트엔드 개발자
             <br />
             심유진입니다.
           </h1>
