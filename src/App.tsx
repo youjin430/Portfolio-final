@@ -22,29 +22,44 @@ function ProjectCard({
   onClick,
 }: ProjectCardProps) {
   return (
-    <div
-      className={`ml-27 hover:scale-[1.02] transition-transform 
+  <div
+    className={`relative group cursor-pointer ml-27 hover:scale-[1.02] transition-transform 
 shadow-[6px_6px_15px_rgba(0,0,0,0.3)] hover:shadow-[8px_8px_20px_rgba(0,0,0,0.45)] 
 flex flex-col shrink-0 p-4 mt-5 w-[300px] h-[350px] rounded-lg ${bgColor}`}
-      onClick={onClick}
+    onClick={onClick}
+  >
+    <h3 className="font-bold text-lg mb-2">{title}</h3>
+    <p className="text-lg mb-3 leading-snug whitespace-pre-line">{desc}</p>
+    <a
+      href={link}
+      target="_blank"
+      onClick={(e) => e.stopPropagation()}
+      className="self-start px-3 py-1.5 mt-auto text-sm break-all bg-white/80 text-amber-400 hover:opacity-80 rounded-lg"
     >
-      <h3 className="font-bold text-lg mb-2">{title}</h3>
-      <p className="text-lg mb-3 leading-snug whitespace-pre-line">{desc}</p>
-      <a
-        href={link}
-        target="_blank"
-        onClick={(e) => e.stopPropagation()}
-        className="self-start px-3 py-1.5 mt-auto text-sm break-all bg-white/80 text-amber-400 hover:opacity-80 rounded-lg"
-      >
-        🔗 {link}
-      </a>
-      <div className="mt-7 flex gap-2 w-6 h-6">
-        {tech.map((src) => (
-          <img key={src} src={src} alt="tech" />
-        ))}
-      </div>
+      🔗 {link}
+    </a>
+    <div className="mt-7 flex gap-2 w-6 h-6">
+      {tech.map((src) => (
+        <img key={src} src={src} alt="tech" />
+      ))}
     </div>
-  );
+
+    {/* 🪄 Hover 오버레이 */}
+    <div
+      className="absolute inset-0 rounded-lg bg-black/20 flex items-center justify-center
+                 opacity-0 group-hover:opacity-100 transition-opacity duration-300
+                 pointer-events-none group-hover:pointer-events-auto"
+    >
+      <button
+        onClick={onClick}
+        className="px-4 py-2 bg-white text-gray-900 font-medium rounded-lg shadow
+                   hover:bg-gray-100 transition"
+      >
+        자세히 보기
+      </button>
+    </div>
+  </div>
+);
 }
 
 // 🪄 Modal (포털 + 오버레이 추가)
