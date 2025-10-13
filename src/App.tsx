@@ -355,8 +355,9 @@ function App() {
   <>
     <h3 className="mb-1">캠핑 정보를 모아 보고 예약까지 한 번에</h3>
     <p className="text-gray-700 whitespace-pre-line mb-4">
-      전국 캠핑장 정보를 검색/필터링하고, 지도로 탐색하며, 외부 예약 링크로 빠르게 이동할 수 있는 통합 플랫폼입니다.
-      Google OAuth 로그인과 챗봇 기반 FAQ/가이드로 사용자 온보딩을 단축했습니다.
+      전국 캠핑장 정보를 검색/필터링하고 지도로 탐색하며, 외부 예약 링크로 빠르게 이동할 수 있는 통합 플랫폼입니다.
+      서비스명 <b>Tember</b>는 <b>Tent</b>와 불꽃을 뜻하는 <b>ember</b>의 합성어로, “텐트 위에서 타오르는 불”을
+      떠올리게 하는 캠핑 이미지를 담았습니다.
     </p>
 
     {/* 💡 주요 기능 및 특징 */}
@@ -364,6 +365,7 @@ function App() {
     <ul className="list-disc list-inside text-gray-700 space-y-1 mb-5">
       <li><b>OAuth 로그인</b> — Google 계정으로 간편 인증</li>
       <li><b>통합 검색</b> — 키워드/지역/테마/편의시설/가격대 복합 필터</li>
+      <li><b>지도 탐색</b> — 지도 범위 내 결과만 보기 &amp; 클러스터링</li>
       <li><b>챗봇</b> — 예약/장비/주의사항 등 FAQ 대화 플로우 제공</li>
     </ul>
 
@@ -372,7 +374,7 @@ function App() {
     <ul className="list-disc list-inside text-gray-700 space-y-1 mb-5">
       <li>Google OAuth 연동(상태 토큰/nonce 검증, 토큰 갱신/만료 처리)</li>
       <li>헤더 검색·필터링 컴포넌트(멀티셀렉트, 접근성 고려 키보드 내비게이션)</li>
-      <li>챗봇 시나리오(FAQ 트리·가이드 플로우, 빠른 액션 버튼) 설계/구현</li>
+      <li>챗봇 시나리오(FAQ 트리·가이드 플로우, 퀵 액션 버튼) 설계/구현</li>
     </ul>
 
     {/* ⚙️ 트러블슈팅 */}
@@ -380,41 +382,39 @@ function App() {
     <ul className="space-y-4 text-gray-800 mb-5">
       <li className="rounded-lg border p-4">
         <p>
-          <span className="inline-flex items-center text-xs font-semibold bg-gray-100 px-2 py-0.5 rounded mr-2">문제점</span>
-          일부 브라우저에서 OAuth 팝업 차단 및 인증 상태가 간헐적으로 유실.
+          <span className="inline-flex items-center text-xs font-semibold bg-gray-100 px-2 py-0.5 rounded mr-2">문제 상황</span>
+          OpenAI API로 받은 챗봇 응답이 네트워크 요청은 정상인데 화면에 전혀 표시되지 않는 현상 발생.
         </p>
-        <p className="mt-2">
-          <span className="inline-flex items-center text-xs font-semibold bg-gray-100 px-2 py-0.5 rounded mr-2">원인</span>
-          자동 팝업 시도 및 세션 스토리지 단일 의존으로 새 탭/새로고침 시 컨텍스트 소실.
-        </p>
-        <p className="mt-2">
-          <span className="inline-flex items-center text-xs font-semibold bg-emerald-100 px-2 py-0.5 rounded mr-2">해결</span>
-          사용자 제스처 기반 버튼에서만 팝업 호출, <b>리디렉트 플로우</b> 폴백 추가.
-          <code>state</code>/<code>nonce</code> 검증 강화 및 <code>refresh_token</code> 로테이션, 스토리지 다중화(localStorage+cookie).
-        </p>
-        <p className="mt-2">
-          <span className="inline-flex items-center text-xs font-semibold bg-blue-100 px-2 py-0.5 rounded mr-2">효과</span>
-          인증 성공률 및 세션 안정성 향상, 재로그인 빈도 감소.
-        </p>
-      </li>
 
-      <li className="rounded-lg border p-4">
-        <p>
-          <span className="inline-flex items-center text-xs font-semibold bg-gray-100 px-2 py-0.5 rounded mr-2">문제점</span>
-          필터 조합 변경 시 리스트 깜빡임과 체감 지연 발생.
+        <p className="mt-3">
+          <span className="inline-flex items-center text-xs font-semibold bg-gray-100 px-2 py-0.5 rounded mr-2">원인 분석</span>
+          응답 객체에서 메시지 추출 경로를 잘못 사용하여 <code>choices</code> 배열만 접근하고 있었음.
+          실제 응답 구조는 아래와 같았고, 텍스트는 <code>data.choices[0].message.content</code>에 존재.
         </p>
-        <p className="mt-2">
-          <span className="inline-flex items-center text-xs font-semibold bg-gray-100 px-2 py-0.5 rounded mr-2">원인</span>
-          연속적인 상태 갱신으로 재렌더 폭주 및 N+1 API 호출, 중단 없는 이전 요청 진행.
+
+        <pre className="mt-3 bg-gray-50 border rounded-md p-3 overflow-x-auto text-sm">
+{`{
+  "choices": [
+    {
+      "message": {
+        "role": "assistant",
+        "content": "안녕하세요, 무엇을 도와드릴까요?"
+      }
+    }
+  ]
+}`}
+        </pre>
+
+        <p className="mt-3">
+          <span className="inline-flex items-center text-xs font-semibold bg-emerald-100 px-2 py-0.5 rounded mr-2">해결 방법</span>
+          콘솔로 응답 전체를 확인한 뒤 경로를 <code>data.choices[0].message.content</code>로 수정하여
+          정확히 파싱. 이 후 정상적으로 화면에 챗봇 응답이 표시됨.
         </p>
-        <p className="mt-2">
-          <span className="inline-flex items-center text-xs font-semibold bg-emerald-100 px-2 py-0.5 rounded mr-2">해결</span>
-          입력 <b>디바운스(300ms)</b> + <code>AbortController</code>로 이전 요청 취소,
-          필터를 집계해 <code>Promise.all</code> 병렬 호출, 스켈레톤/플레이스홀더 적용.
-        </p>
-        <p className="mt-2">
-          <span className="inline-flex items-center text-xs font-semibold bg-blue-100 px-2 py-0.5 rounded mr-2">효과</span>
-          렌더 안정화 및 체감 로딩 감소.
+
+        <p className="mt-3">
+          <span className="inline-flex items-center text-xs font-semibold bg-blue-100 px-2 py-0.5 rounded mr-2">배운 점</span>
+          문서만 읽는 것에 그치지 않고 실제 응답 구조를 콘솔로 검증하는 디버깅 습관의 중요성 확인.
+          작아 보이는 접근 경로 오류 하나가 전체 기능을 막을 수 있으므로, 데이터 흐름을 끝까지 추적·검증할 것.
         </p>
       </li>
     </ul>
