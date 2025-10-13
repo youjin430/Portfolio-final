@@ -254,16 +254,75 @@ function App() {
       ],
       bgColor: "bg-emerald-200",
       detail: (
-      <>
-        <h3 className="mb-5">여행 일정을 공유하고 검색할 수 있는 커뮤니티</h3>
-        <p className="text-gray-700 whitespace-pre-line">상세내용</p>
-        <ol className="list-decimal list-inside text-gray-700 mt-2 space-y-1">
-          <li>마이페이지 UI/UX 구현</li>
-          <li>검색 및 알림 기능 개발</li>
-          <li>React + Zustand 상태관리 적용</li>
-        </ol>
-      </>
-    ),
+  <>
+    <h3 className="mb-1">여행 일정을 공유하고 검색할 수 있는 커뮤니티</h3>
+    <p className="text-gray-700 whitespace-pre-line mb-4">
+      사용자들이 자신의 여행 일정을 카드/캘린더 형태로 공유하고, 관심 지역·기간·태그로 손쉽게 검색할 수 있는 서비스입니다.
+      댓글/좋아요/스크랩과 팔로우 기반 알림으로 상호작용을 강화했습니다.
+    </p>
+
+    {/* 💡 주요 기능 및 특징 */}
+    <h4 className="font-medium text-lg mb-2">💡 주요 기능 및 특징</h4>
+    <ul className="list-disc list-inside text-gray-700 space-y-1 mb-5">
+      <li><b>일정 공유</b> — 카드/캘린더 보기 지원, 태그·사진 첨부</li>
+      <li><b>고급 검색</b> — 키워드·지역·기간·태그 복합 필터 및 정렬</li>
+      <li><b>알림</b> — 댓글/좋아요/팔로우 이벤트 실시간 드롭다운 알림</li>
+      <li><b>마이페이지</b> — 나의 일정/스크랩/활동 통계 확인</li>
+    </ul>
+
+    {/* 👩‍💻 담당 역할 및 구현 */}
+    <h4 className="font-medium text-lg mb-2">👩‍💻 담당 역할 및 구현</h4>
+    <ul className="list-disc list-inside text-gray-700 space-y-1 mb-5">
+      <li>마이페이지 UI/UX 구성(반응형 그리드, 접근성 고려 탭/카드)</li>
+      <li>검색 상태 전역 관리(Zustand) + <code>URLSearchParams</code> 동기화로 공유 가능한 검색 URL 구현</li>
+      <li>알림 드롭다운/토스트 컴포넌트, 읽음 처리/페이징 및 무한 스크롤(<code>IntersectionObserver</code>)</li>
+    </ul>
+
+    {/* ⚙️ 트러블슈팅 */}
+    <h4 className="font-medium text-lg mb-2">⚙️ 트러블슈팅</h4>
+    <ul className="space-y-4 text-gray-800 mb-5">
+      <li className="rounded-lg border p-4">
+        <p>
+          <span className="inline-flex items-center text-xs font-semibold bg-gray-100 px-2 py-0.5 rounded mr-2">문제점</span>
+          브라우저 뒤로가기 시 검색 필터가 초기화되어 사용자 혼란 발생.
+        </p>
+        <p className="mt-2">
+          <span className="inline-flex items-center text-xs font-semibold bg-gray-100 px-2 py-0.5 rounded mr-2">원인</span>
+          초기 마운트 시 전역 상태를 기본값으로 재설정, URL→상태 복원 로직 누락.
+        </p>
+        <p className="mt-2">
+          <span className="inline-flex items-center text-xs font-semibold bg-emerald-100 px-2 py-0.5 rounded mr-2">해결</span>
+          <code>useEffect</code>에서 최초 1회 <b>URL→Store</b> 복원 후, 이후 변경은 <b>Store→URL</b>로 반영.
+          <code>history.replaceState</code> 사용으로 히스토리 오염 방지.
+        </p>
+        <p className="mt-2">
+          <span className="inline-flex items-center text-xs font-semibold bg-blue-100 px-2 py-0.5 rounded mr-2">효과</span>
+          뒤로가기/새로고침에서도 동일 검색 컨텍스트 유지, 이탈률 감소.
+        </p>
+      </li>
+
+      <li className="rounded-lg border p-4">
+        <p>
+          <span className="inline-flex items-center text-xs font-semibold bg-gray-100 px-2 py-0.5 rounded mr-2">문제점</span>
+          무한 스크롤 구간에서 API 중복 호출 및 중복 카드 렌더링.
+        </p>
+        <p className="mt-2">
+          <span className="inline-flex items-center text-xs font-semibold bg-gray-100 px-2 py-0.5 rounded mr-2">원인</span>
+          관찰 대상이 로딩 중에도 계속 관찰되어 <code>onIntersect</code>가 재실행, 로딩 플래그/커서 검증 부재.
+        </p>
+        <p className="mt-2">
+          <span className="inline-flex items-center text-xs font-semibold bg-emerald-100 px-2 py-0.5 rounded mr-2">해결</span>
+          <code>inFlight</code> 플래그 + <code>cursor</code> 기반 페이지네이션, 요청 전 <code>unobserve</code> → 완료 후 재등록.
+          스로틀/디바운스 200~300ms 적용.
+        </p>
+        <p className="mt-2">
+          <span className="inline-flex items-center text-xs font-semibold bg-blue-100 px-2 py-0.5 rounded mr-2">효과</span>
+          API 중복 호출 제거, 스크롤 체감 지연 감소.
+        </p>
+      </li>
+    </ul>
+  </>
+),
     },
     {
       title: "캠핑 통합 플랫폼",
@@ -278,16 +337,74 @@ function App() {
       ],
       bgColor: "bg-emerald-100",
       detail: (
-      <>
-        <h3 className="mb-5">캠핑 정보를 모아 보고 예약까지 한 번에</h3>
-        <p className="text-gray-700 whitespace-pre-line">상세내용</p>
-        <ol className="list-decimal list-inside text-gray-700 mt-2 space-y-1">
-          <li>Google OAuth 로그인 연동</li>
-          <li>헤더 검색 · 필터링 UX 최적화</li>
-          <li>챗봇 FAQ/가이드 플로우 구현</li>
-        </ol>
-      </>
-    ),
+  <>
+    <h3 className="mb-1">캠핑 정보를 모아 보고 예약까지 한 번에</h3>
+    <p className="text-gray-700 whitespace-pre-line mb-4">
+      전국 캠핑장 정보를 검색/필터링하고, 지도로 탐색하며, 외부 예약 링크로 빠르게 이동할 수 있는 통합 플랫폼입니다.
+      Google OAuth 로그인과 챗봇 기반 FAQ/가이드로 사용자 온보딩을 단축했습니다.
+    </p>
+
+    {/* 💡 주요 기능 및 특징 */}
+    <h4 className="font-medium text-lg mb-2">💡 주요 기능 및 특징</h4>
+    <ul className="list-disc list-inside text-gray-700 space-y-1 mb-5">
+      <li><b>OAuth 로그인</b> — Google 계정으로 간편 인증</li>
+      <li><b>통합 검색</b> — 키워드/지역/테마/편의시설/가격대 복합 필터</li>
+      <li><b>챗봇</b> — 예약/장비/주의사항 등 FAQ 대화 플로우 제공</li>
+    </ul>
+
+    {/* 👩‍💻 담당 역할 및 구현 */}
+    <h4 className="font-medium text-lg mb-2">👩‍💻 담당 역할 및 구현</h4>
+    <ul className="list-disc list-inside text-gray-700 space-y-1 mb-5">
+      <li>Google OAuth 연동(상태 토큰/nonce 검증, 토큰 갱신/만료 처리)</li>
+      <li>헤더 검색·필터링 컴포넌트(멀티셀렉트, 접근성 고려 키보드 내비게이션)</li>
+      <li>챗봇 시나리오(FAQ 트리·가이드 플로우, 빠른 액션 버튼) 설계/구현</li>
+    </ul>
+
+    {/* ⚙️ 트러블슈팅 */}
+    <h4 className="font-medium text-lg mb-2">⚙️ 트러블슈팅</h4>
+    <ul className="space-y-4 text-gray-800 mb-5">
+      <li className="rounded-lg border p-4">
+        <p>
+          <span className="inline-flex items-center text-xs font-semibold bg-gray-100 px-2 py-0.5 rounded mr-2">문제점</span>
+          일부 브라우저에서 OAuth 팝업 차단 및 인증 상태가 간헐적으로 유실.
+        </p>
+        <p className="mt-2">
+          <span className="inline-flex items-center text-xs font-semibold bg-gray-100 px-2 py-0.5 rounded mr-2">원인</span>
+          자동 팝업 시도 및 세션 스토리지 단일 의존으로 새 탭/새로고침 시 컨텍스트 소실.
+        </p>
+        <p className="mt-2">
+          <span className="inline-flex items-center text-xs font-semibold bg-emerald-100 px-2 py-0.5 rounded mr-2">해결</span>
+          사용자 제스처 기반 버튼에서만 팝업 호출, <b>리디렉트 플로우</b> 폴백 추가.
+          <code>state</code>/<code>nonce</code> 검증 강화 및 <code>refresh_token</code> 로테이션, 스토리지 다중화(localStorage+cookie).
+        </p>
+        <p className="mt-2">
+          <span className="inline-flex items-center text-xs font-semibold bg-blue-100 px-2 py-0.5 rounded mr-2">효과</span>
+          인증 성공률 및 세션 안정성 향상, 재로그인 빈도 감소.
+        </p>
+      </li>
+
+      <li className="rounded-lg border p-4">
+        <p>
+          <span className="inline-flex items-center text-xs font-semibold bg-gray-100 px-2 py-0.5 rounded mr-2">문제점</span>
+          필터 조합 변경 시 리스트 깜빡임과 체감 지연 발생.
+        </p>
+        <p className="mt-2">
+          <span className="inline-flex items-center text-xs font-semibold bg-gray-100 px-2 py-0.5 rounded mr-2">원인</span>
+          연속적인 상태 갱신으로 재렌더 폭주 및 N+1 API 호출, 중단 없는 이전 요청 진행.
+        </p>
+        <p className="mt-2">
+          <span className="inline-flex items-center text-xs font-semibold bg-emerald-100 px-2 py-0.5 rounded mr-2">해결</span>
+          입력 <b>디바운스(300ms)</b> + <code>AbortController</code>로 이전 요청 취소,
+          필터를 집계해 <code>Promise.all</code> 병렬 호출, 스켈레톤/플레이스홀더 적용.
+        </p>
+        <p className="mt-2">
+          <span className="inline-flex items-center text-xs font-semibold bg-blue-100 px-2 py-0.5 rounded mr-2">효과</span>
+          렌더 안정화 및 체감 로딩 감소.
+        </p>
+      </li>
+    </ul>
+  </>
+),
     },
     {
       title: "AI 기반 여가생활 추천 서비스",
@@ -304,16 +421,78 @@ function App() {
       ],
       bgColor: "bg-emerald-200",
       detail: (
-      <>
-        <h3 className="mb-5">취향 기반 AI 여가 추천 & 이벤트 탐색</h3>
-        <p className="text-gray-700 whitespace-pre-line">상세내용</p>
-        <ol className="list-decimal list-inside text-gray-700 mt-2 space-y-1">
-          <li>프롬프트 설계로 챗봇 추천 정밀도 개선</li>
-          <li>행사/모임 목록 검색·필터·정렬 구현</li>
-          <li>추천 배치/캐시 전략으로 UX 지연 감소</li>
-        </ol>
-      </>
-    ),
+  <>
+    <h3 className="mb-1">취향 기반 AI 여가 추천 & 이벤트 탐색</h3>
+    <p className="text-gray-700 whitespace-pre-line mb-4">
+      사용자 취향/상황(날짜·지역·예산 등)에 맞춰 활동/이벤트를 추천하고,
+      모임을 개설·탐색할 수 있는 서비스입니다.
+      <span className="block mt-1 text-sm text-gray-500">
+        🌟 백엔드 리소스 종료로 실서비스 중단(2025.08)
+      </span>
+    </p>
+
+    {/* 💡 주요 기능 및 특징 */}
+    <h4 className="font-medium text-lg mb-2">💡 주요 기능 및 특징</h4>
+    <ul className="list-disc list-inside text-gray-700 space-y-1 mb-5">
+      <li><b>챗봇 추천</b> — 프롬프트 설계/후처리로 맥락 유지·중복 제거</li>
+      <li><b>행사/모임 탐색</b> — 검색·필터(지역/카테고리/날짜)·정렬</li>
+      <li><b>추천 성능</b> — 캐시/배치 프리컴퓨트로 첫 화면 지연 감소</li>
+      <li><b>즐겨찾기/스크랩</b> — 개인화된 저장/재추천 루프</li>
+    </ul>
+
+    {/* 👩‍💻 담당 역할 및 구현 */}
+    <h4 className="font-medium text-lg mb-2">👩‍💻 담당 역할 및 구현</h4>
+    <ul className="list-disc list-inside text-gray-700 space-y-1 mb-5">
+      <li>챗봇 프롬프트 엔지니어링(시스템/사용자 프롬프트 분리, 안전 가드레일)</li>
+      <li>행사/모임 목록 검색·필터·정렬 UI, 가상 스크롤·스켈레톤 적용</li>
+      <li>추천 캐시 전략(쿼리 키 설계, 사전 패치/프리페치, 낙관적 업데이트)으로 UX 지연 최소화</li>
+    </ul>
+
+    {/* ⚙️ 트러블슈팅 */}
+    <h4 className="font-medium text-lg mb-2">⚙️ 트러블슈팅</h4>
+    <ul className="space-y-4 text-gray-800 mb-5">
+      <li className="rounded-lg border p-4">
+        <p>
+          <span className="inline-flex items-center text-xs font-semibold bg-gray-100 px-2 py-0.5 rounded mr-2">문제점</span>
+          챗봇이 유사한 항목을 반복 추천하거나 특정 카테고리에 편향.
+        </p>
+        <p className="mt-2">
+          <span className="inline-flex items-center text-xs font-semibold bg-gray-100 px-2 py-0.5 rounded mr-2">원인</span>
+          프롬프트 장황 및 후처리 중복 제거 미흡, 컨텍스트 길이 초과로 요약 손실.
+        </p>
+        <p className="mt-2">
+          <span className="inline-flex items-center text-xs font-semibold bg-emerald-100 px-2 py-0.5 rounded mr-2">해결</span>
+          결과 <b>디듀프</b>(타이틀 정규화·유사도 임계), <b>카테고리 다양성 제약</b> 추가,
+          토큰 상한/스톱시퀀스 도입 및 대화 요약 단계 삽입.
+        </p>
+        <p className="mt-2">
+          <span className="inline-flex items-center text-xs font-semibold bg-blue-100 px-2 py-0.5 rounded mr-2">효과</span>
+          추천 다양성·신뢰도 향상, 이탈 감소.
+        </p>
+      </li>
+
+      <li className="rounded-lg border p-4">
+        <p>
+          <span className="inline-flex items-center text-xs font-semibold bg-gray-100 px-2 py-0.5 rounded mr-2">문제점</span>
+          필터 연속 변경 시 리스트 재렌더가 과도하여 프레임 드랍 발생.
+        </p>
+        <p className="mt-2">
+          <span className="inline-flex items-center text-xs font-semibold bg-gray-100 px-2 py-0.5 rounded mr-2">원인</span>
+          동기 요청 누적 및 취소 불가, 메모이제이션 미흡으로 불필요한 재계산.
+        </p>
+        <p className="mt-2">
+          <span className="inline-flex items-center text-xs font-semibold bg-emerald-100 px-2 py-0.5 rounded mr-2">해결</span>
+          요청 <b>취소</b>(<code>AbortController</code>) + <b>디바운스</b>,
+          리스트 <b>가상화</b>(예: <code>react-window</code>) 및 <code>useMemo</code>/<code>useCallback</code> 최적화.
+        </p>
+        <p className="mt-2">
+          <span className="inline-flex items-center text-xs font-semibold bg-blue-100 px-2 py-0.5 rounded mr-2">효과</span>
+          FPS 및 입력 반응성 개선, 체감 속도 상승.
+        </p>
+      </li>
+    </ul>
+  </>
+),
     },
   ];
 
