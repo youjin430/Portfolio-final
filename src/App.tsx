@@ -439,7 +439,7 @@ function App() {
   <>
     <h3 className="mb-1">취향 기반 AI 여가 추천 & 이벤트 탐색</h3>
     <p className="text-gray-700 whitespace-pre-line mb-4">
-      사용자 취향/상황(날짜·지역·예산 등)에 맞춰 활동/이벤트를 추천하고,
+      사용자 취향/상황(날짜·지역 등)에 맞춰 활동/이벤트를 추천하고,
       모임을 개설·탐색할 수 있는 서비스입니다.
       <span className="block mt-1 text-sm text-gray-500">
         🌟 백엔드 리소스 종료로 실서비스 중단(2025.08)
@@ -450,9 +450,9 @@ function App() {
     <h4 className="font-medium text-lg mb-2">💡 주요 기능 및 특징</h4>
     <ul className="list-disc list-inside text-gray-700 space-y-1 mb-5">
       <li><b>챗봇 추천</b> — 프롬프트 설계/후처리로 맥락 유지·중복 제거</li>
-      <li><b>행사/모임 탐색</b> — 검색·필터(지역/카테고리/날짜)·정렬</li>
+      <li><b>행사/모임 탐색</b> — 검색·필터(거리별/카테고리별/인기순)·정렬</li>
       <li><b>추천 성능</b> — 캐시/배치 프리컴퓨트로 첫 화면 지연 감소</li>
-      <li><b>즐겨찾기/스크랩</b> — 개인화된 저장/재추천 루프</li>
+      <li><b>내 일정 등록</b> — 행사나 모임에서 "내 일정에 추가" 버튼 클릭 시 마이페이지 캘린더에 자동 등록</li>
     </ul>
 
     {/* 👩‍💻 담당 역할 및 구현 */}
@@ -463,49 +463,59 @@ function App() {
       <li>추천 캐시 전략(쿼리 키 설계, 사전 패치/프리페치, 낙관적 업데이트)으로 UX 지연 최소화</li>
     </ul>
 
-    {/* ⚙️ 트러블슈팅 */}
-    <h4 className="font-medium text-lg mb-2">⚙️ 트러블슈팅</h4>
-    <ul className="space-y-4 text-gray-800 mb-5">
-      <li className="rounded-lg border p-4">
-        <p>
-          <span className="inline-flex items-center text-xs font-semibold bg-gray-100 px-2 py-0.5 rounded mr-2">문제점</span>
-          챗봇이 유사한 항목을 반복 추천하거나 특정 카테고리에 편향.
-        </p>
-        <p className="mt-2">
-          <span className="inline-flex items-center text-xs font-semibold bg-gray-100 px-2 py-0.5 rounded mr-2">원인</span>
-          프롬프트 장황 및 후처리 중복 제거 미흡, 컨텍스트 길이 초과로 요약 손실.
-        </p>
-        <p className="mt-2">
-          <span className="inline-flex items-center text-xs font-semibold bg-emerald-100 px-2 py-0.5 rounded mr-2">해결</span>
-          결과 <b>디듀프</b>(타이틀 정규화·유사도 임계), <b>카테고리 다양성 제약</b> 추가,
-          토큰 상한/스톱시퀀스 도입 및 대화 요약 단계 삽입.
-        </p>
-        <p className="mt-2">
-          <span className="inline-flex items-center text-xs font-semibold bg-blue-100 px-2 py-0.5 rounded mr-2">효과</span>
-          추천 다양성·신뢰도 향상, 이탈 감소.
-        </p>
-      </li>
+    {/* ⚙️ 트러블슈팅 — Next.js <Image> vs HTML <img> */}  
+<h4 className="font-medium text-lg mb-2">
+  ⚙️ 트러블슈팅 — <code>Next.js &lt;Image&gt;</code> vs <code>HTML &lt;img&gt;</code>
+</h4>
+<ul className="space-y-4 text-gray-800 mb-5">
+  <li className="rounded-lg border p-4">
+    <p>
+      <span className="inline-flex items-center text-xs font-semibold bg-gray-100 px-2 py-0.5 rounded mr-2">문제 상황</span>
+      로컬 개발 환경에서는 <code>Next.js</code>의 <code>&lt;Image&gt;</code> 컴포넌트를 사용해 이미지가 정상적으로 보였지만,  
+      배포(Vercel) 환경에서는 썸네일·로고 등의 이미지가 깨지거나 표시되지 않는 현상이 발생함.  
+      반대로 <code>&lt;img&gt;</code>로 교체하면 배포에서는 정상 표시되었으나,  
+      로컬에서는 ESLint 규칙(<code>next/no-img-element</code>)에 의해 경고가 발생함.
+    </p>
 
-      <li className="rounded-lg border p-4">
-        <p>
-          <span className="inline-flex items-center text-xs font-semibold bg-gray-100 px-2 py-0.5 rounded mr-2">문제점</span>
-          필터 연속 변경 시 리스트 재렌더가 과도하여 프레임 드랍 발생.
-        </p>
-        <p className="mt-2">
-          <span className="inline-flex items-center text-xs font-semibold bg-gray-100 px-2 py-0.5 rounded mr-2">원인</span>
-          동기 요청 누적 및 취소 불가, 메모이제이션 미흡으로 불필요한 재계산.
-        </p>
-        <p className="mt-2">
-          <span className="inline-flex items-center text-xs font-semibold bg-emerald-100 px-2 py-0.5 rounded mr-2">해결</span>
-          요청 <b>취소</b>(<code>AbortController</code>) + <b>디바운스</b>,
-          리스트 <b>가상화</b>(예: <code>react-window</code>) 및 <code>useMemo</code>/<code>useCallback</code> 최적화.
-        </p>
-        <p className="mt-2">
-          <span className="inline-flex items-center text-xs font-semibold bg-blue-100 px-2 py-0.5 rounded mr-2">효과</span>
-          FPS 및 입력 반응성 개선, 체감 속도 상승.
-        </p>
-      </li>
-    </ul>
+    <p className="mt-3">
+      <span className="inline-flex items-center text-xs font-semibold bg-gray-100 px-2 py-0.5 rounded mr-2">원인 분석</span>
+      <code>&lt;Image&gt;</code>는 Next.js가 제공하는 <b>이미지 최적화 컴포넌트</b>로,  
+      빌드 타임에 이미지 경로를 분석하고 외부 리소스는 <code>next.config.js</code>의 <code>images.domains</code>에 등록되어야만 로드됨.  
+      배포 시 도메인 미등록 또는 최적화 과정에서 SVG 등 일부 포맷이 차단되면서  
+      이미지가 누락되는 문제가 발생함.  
+      반면 <code>&lt;img&gt;</code>는 브라우저 기본 태그이므로 모든 이미지를 그대로 렌더링해 정상 표시됨.
+    </p>
+
+    <div className="mt-3 bg-gray-50 border rounded-md p-3 overflow-x-auto text-sm">
+{`// next.config.js — 외부 이미지 허용 설정 예시
+module.exports = {
+  images: {
+    domains: ['cdn.jsdelivr.net', 'images.unsplash.com'],
+  },
+};`}
+    </div>
+
+    <p className="mt-3">
+      <span className="inline-flex items-center text-xs font-semibold bg-emerald-100 px-2 py-0.5 rounded mr-2">해결 방법</span>
+      배포 환경에서의 안정성을 우선시해 <b>&lt;Image&gt;</b> 대신 <b>기본 &lt;img&gt; 태그로 교체</b>.  
+      정적 리소스는 <code>/public</code> 폴더에 직접 배치해 경로 문제를 해결했고,  
+      린트 에러(<code>next/no-img-element</code>)는 <b>라인 단위 예외</b>로 처리해 빌드 차단을 방지함.
+    </p>
+
+    <div className="mt-3 bg-gray-50 border rounded-md p-3 overflow-x-auto text-sm">
+{`// eslint-disable-next-line @next/next/no-img-element
+<img src="/banner.png" alt="서비스 배너" />`}
+    </div>
+
+    <p className="mt-3">
+      <span className="inline-flex items-center text-xs font-semibold bg-blue-100 px-2 py-0.5 rounded mr-2">배운 점</span>
+      <code>Next.js</code>의 <code>&lt;Image&gt;</code>는 성능 최적화에 유리하지만,  
+      설정이 누락되면 배포 환경에서 오히려 리소스가 누락될 수 있음을 배움.  
+      간단한 정적 리소스는 <code>&lt;img&gt;</code>를 활용하는 것이  
+      더 안정적일 수 있으며, 로컬·배포 환경 모두에서의 **동작 일관성 검증**이 중요하다는 점을 깨달음.
+    </p>
+  </li>
+</ul>
   </>
 ),
     },
