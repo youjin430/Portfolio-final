@@ -14,7 +14,8 @@ type ProjectCardProps = {
   bgColor: string;
   onClick: () => void;
 };
-
+type ImgPos = 'object-top' | 'object-center' | 'object-left' | 'object-right';
+type ImgFit = 'cover' | 'contain';
 function ProjectCard({
   title,
   desc,
@@ -83,8 +84,8 @@ function Modal({
   title: string;
   desc: string;
   detail:ReactNode;
-  imgPos?: 'object-top' | 'object-center' | 'object-left' | 'object-right';
-  imgFit?: 'cover' | 'contain';
+  imgPos?: ImgPos;
+  imgFit?: ImgFit;
 }) {
   useEffect(() => {
     if (!open) return;
@@ -164,8 +165,8 @@ function App() {
     title: string;
     desc: string;
     detail: ReactNode | null;
-    imgPos?: 'object-top' | 'object-center' | 'object-left' | 'object-right';
-    imgFit?: 'cover' | 'contain';
+    imgPos?: ImgPos;
+    imgFit?: ImgFit;
   }>({ open: false, imageSrc: "", link: "", title: "", desc: "",detail: null, imgPos: 'object-top',imgFit: 'cover',});
 
   const projectRef = useRef<HTMLDivElement>(null);
@@ -533,7 +534,17 @@ module.exports = {
 ),
 imgPos: 'object-center',
     },
-  ];
+  ]satisfies Array<{
+  title: string;
+  desc: string;
+  link: string;
+  imageSrc: string;
+  tech: string[];
+  bgColor: string;
+  detail: React.ReactNode;
+  imgPos?: ImgPos;
+  imgFit?: ImgFit;
+}>;
 
   const { ref: endRef, inView: endInView } =
   useInView<HTMLDivElement>({ threshold: 0, rootMargin: "0px 0px 40% 0px" });
