@@ -106,7 +106,7 @@ function Modal({
       <div
         className="relative w-[92vw] max-w-[800px] min-h-[70vh] max-h-[90vh]
                    bg-white rounded-2xl shadow-[0_10px_40px_rgba(0,0,0,0.35)]
-                   border border-black/10 flex flex-col font-gmarket"
+                   border border-black/10 flex flex-col font-gmarket font-semibold"
         onClick={(e) => e.stopPropagation()}
       >
         {/* 닫기 버튼 */}
@@ -129,7 +129,7 @@ function Modal({
              [scrollbar-width:thin] [&::-webkit-scrollbar]:w-2
              [&::-webkit-scrollbar-thumb]:bg-gray-300 [&::-webkit-scrollbar-thumb]:rounded-full
              [&::-webkit-scrollbar-track]:bg-gray-100">
-          <h2 className="text-xl md:text-2xl">프로젝트 설명</h2>
+          <h2 className="text-xl md:text-2xl"><b>프로젝트 설명</b></h2>
           {detail}
 
           {link && (
@@ -183,7 +183,7 @@ function App() {
   </p>
 
   {/* 💡 주요 기능 및 특징 */}
-<h4 className="font-medium text-lg mb-2">💡 주요 기능 및 특징</h4>
+<h4 className="font-medium text-lg mb-2"><b>💡 주요 기능 및 특징</b></h4>
 <ul className="list-disc list-inside text-gray-700 space-y-1 mb-5">
   <li>
     <b>딕테이션(Dictation)</b> — 영어 문장 소리를 듣고 직접 받아쓰며
@@ -200,7 +200,7 @@ function App() {
 </ul>
 
   {/* 👩‍💻 담당 역할 및 구현 */}
-<h4 className="font-medium text-lg mb-2">👩‍💻 담당 역할 및 구현</h4>
+<h4 className="font-medium text-lg mb-2"><b>👩‍💻 담당 역할 및 구현</b></h4>
 <ul className="list-disc list-inside text-gray-700 space-y-1 mb-5">
   <li>정적 페이지 퍼블리싱 및 UI 구조 설계(Figma 기준 간격/타이포 맞춤)</li>
   <li>모달 열기/닫기, 탭/아코디언 등 간단한 UI 인터랙션 자바스크립트로 구현</li>
@@ -208,7 +208,7 @@ function App() {
 </ul>
 
   {/* ⚙️ 트러블슈팅 */}
-<h4 className="font-medium text-lg mb-2">⚙️ 트러블슈팅</h4>
+<h4 className="font-medium text-lg mb-2"><b>⚙️ 트러블슈팅</b></h4>
 <ul className="space-y-4 text-gray-800 mb-5">
 
   {/* 1. Enter/Space 포커스 이동 이슈 */}
@@ -281,7 +281,7 @@ function App() {
     </p>
 
     {/* 💡 주요 기능 및 특징 */}
-    <h4 className="font-medium text-lg mb-2">💡 주요 기능 및 특징</h4>
+    <h4 className="font-medium text-lg mb-2"><b>💡 주요 기능 및 특징</b></h4>
     <ul className="list-disc list-inside text-gray-700 space-y-1 mb-5">
       <li><b>일정 공유</b> — 카드/캘린더 보기 지원, 태그·사진 첨부</li>
       <li><b>고급 검색</b> — 키워드·지역·기간·태그 복합 필터 및 정렬</li>
@@ -290,7 +290,7 @@ function App() {
     </ul>
 
     {/* 👩‍💻 담당 역할 및 구현 */}
-    <h4 className="font-medium text-lg mb-2">👩‍💻 담당 역할 및 구현</h4>
+    <h4 className="font-medium text-lg mb-2"><b>👩‍💻 담당 역할 및 구현</b></h4>
     <ul className="list-disc list-inside text-gray-700 space-y-1 mb-5">
       <li>마이페이지 UI/UX 구성(반응형 그리드, 접근성 고려 탭/카드)</li>
       <li>검색 상태 전역 관리(Zustand) + <code>URLSearchParams</code> 동기화로 공유 가능한 검색 URL 구현</li>
@@ -298,7 +298,7 @@ function App() {
     </ul>
 
     {/* ⚙️ 트러블슈팅 */}
-    <h4 className="font-medium text-lg mb-2">⚙️ 트러블슈팅</h4>
+    <h4 className="font-medium text-lg mb-2"><b>⚙️ 트러블슈팅</b></h4>
     <ul className="space-y-4 text-gray-800 mb-5">
       <li className="rounded-lg border p-4">
         <p>
@@ -365,7 +365,7 @@ function App() {
     </p>
 
     {/* 💡 주요 기능 및 특징 */}
-    <h4 className="font-medium text-lg mb-2">💡 주요 기능 및 특징</h4>
+    <h4 className="font-medium text-lg mb-2"><b>💡 주요 기능 및 특징</b></h4>
     <ul className="list-disc list-inside text-gray-700 space-y-1 mb-5">
       <li><b>OAuth 로그인</b> — Google 계정으로 간편 인증</li>
       <li><b>통합 검색</b> — 키워드/지역/테마/편의시설/가격대 복합 필터</li>
@@ -374,7 +374,7 @@ function App() {
     </ul>
 
     {/* 👩‍💻 담당 역할 및 구현 */}
-    <h4 className="font-medium text-lg mb-2">👩‍💻 담당 역할 및 구현</h4>
+    <h4 className="font-medium text-lg mb-2"><b>👩‍💻 담당 역할 및 구현</b></h4>
     <ul className="list-disc list-inside text-gray-700 space-y-1 mb-5">
       <li>Google OAuth 연동(상태 토큰/nonce 검증, 토큰 갱신/만료 처리)</li>
       <li>헤더 검색·필터링 컴포넌트(멀티셀렉트, 접근성 고려 키보드 내비게이션)</li>
@@ -382,7 +382,7 @@ function App() {
     </ul>
 
     {/* ⚙️ 트러블슈팅 */}
-    <h4 className="font-medium text-lg mb-2">⚙️ 트러블슈팅</h4>
+    <h4 className="font-medium text-lg mb-2"><b>⚙️ 트러블슈팅</b></h4>
     <ul className="space-y-4 text-gray-800 mb-5">
       <li className="rounded-lg border p-4">
         <p>
@@ -451,7 +451,7 @@ function App() {
     </p>
 
     {/* 💡 주요 기능 및 특징 */}
-    <h4 className="font-medium text-lg mb-2">💡 주요 기능 및 특징</h4>
+    <h4 className="font-medium text-lg mb-2"><b>💡 주요 기능 및 특징</b></h4>
     <ul className="list-disc list-inside text-gray-700 space-y-1 mb-5">
       <li><b>챗봇 추천</b> — 프롬프트 설계/후처리로 맥락 유지·중복 제거</li>
       <li><b>행사/모임 탐색</b> — 검색·필터(거리별/카테고리별/인기순)·정렬</li>
@@ -460,7 +460,7 @@ function App() {
     </ul>
 
     {/* 👩‍💻 담당 역할 및 구현 */}
-    <h4 className="font-medium text-lg mb-2">👩‍💻 담당 역할 및 구현</h4>
+    <h4 className="font-medium text-lg mb-2"><b>👩‍💻 담당 역할 및 구현</b></h4>
     <ul className="list-disc list-inside text-gray-700 space-y-1 mb-5">
       <li>챗봇 프롬프트 엔지니어링(시스템/사용자 프롬프트 분리, 안전 가드레일)</li>
       <li>행사/모임 목록 검색·필터·정렬 UI, 가상 스크롤·스켈레톤 적용</li>
@@ -469,7 +469,7 @@ function App() {
 
     {/* ⚙️ 트러블슈팅 — Next.js <Image> vs HTML <img> */}  
 <h4 className="font-medium text-lg mb-2">
-  ⚙️ 트러블슈팅 — <code>Next.js &lt;Image&gt;</code> vs <code>HTML &lt;img&gt;</code>
+  <b>⚙️ 트러블슈팅 — <code>Next.js &lt;Image&gt;</code> vs <code>HTML &lt;img&gt;</code></b>
 </h4>
 <ul className="space-y-4 text-gray-800 mb-5">
   <li className="rounded-lg border p-4">
