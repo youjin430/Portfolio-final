@@ -1,4 +1,4 @@
-import { useState, useEffect, type ReactNode } from "react";
+import { useState, useEffect, type ReactNode,useRef } from "react";
 import { createPortal } from "react-dom";
 import "./App.css";
 import Reveal from "./components/Reveal";
@@ -159,6 +159,8 @@ function App() {
     desc: string;
     detail: ReactNode | null;
   }>({ open: false, imageSrc: "", link: "", title: "", desc: "",detail: null, });
+
+  const projectRef = useRef<HTMLDivElement>(null);
 
   const projects = [
     {
@@ -584,7 +586,7 @@ module.exports = {
         카드를 눌러서 프로젝트의 세부사항을 확인해보세요
       </p>
 
-      <div className="relative flex flex-wrap px-6 md:px-12 gap-8 mb-16 pb-24 justify-center md:justify-start">
+      <div ref={projectRef} className="relative flex flex-wrap px-6 md:px-12 gap-8 mb-16 pb-24 justify-center md:justify-start">
   {projects.map((p) => (
     <ProjectCard
       key={p.title}
