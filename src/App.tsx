@@ -165,7 +165,8 @@ function App() {
     desc: string;
     detail: ReactNode | null;
     imgPos?: 'object-top' | 'object-center' | 'object-left' | 'object-right';
-  }>({ open: false, imageSrc: "", link: "", title: "", desc: "",detail: null, imgPos: 'object-top',});
+    imgFit?: 'cover' | 'contain';
+  }>({ open: false, imageSrc: "", link: "", title: "", desc: "",detail: null, imgPos: 'object-top',imgFit: 'cover',});
 
   const projectRef = useRef<HTMLDivElement>(null);
 
