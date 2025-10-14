@@ -26,9 +26,9 @@ function ProjectCard({
 }: ProjectCardProps) {
   return (
   <div
-    className={`relative group cursor-pointer ml-27 hover:scale-[1.02] transition-transform 
+    className={`relative group cursor-pointer hover:scale-[1.02] transition-transform 
 shadow-[6px_6px_15px_rgba(0,0,0,0.3)] hover:shadow-[8px_8px_20px_rgba(0,0,0,0.45)] 
-flex flex-col shrink-0 p-4 mt-5 w-[300px] h-[350px] rounded-lg ${bgColor}`}
+flex flex-col shrink-0 p-4 mt-5 w-[300px] h-[350px] rounded-lg ${bgColor} flex-none snap-start`}
     onClick={onClick}
   >
     <h3 className="font-bold text-lg mb-2">{title}</h3>
@@ -65,39 +65,45 @@ flex flex-col shrink-0 p-4 mt-5 w-[300px] h-[350px] rounded-lg ${bgColor}`}
 );
 }
 
-// 🪄 Modal (포털 + 오버레이 추가)
+// 🪄 Modal (포털 + 오버레이)
 function Modal({
   open,
   onClose,
+  onPrev,
+  onNext,
   imageSrc,
   link,
-  // title,
-  // desc,
   detail,
   imgPos = 'object-top',
   imgFit = 'cover',
 }: {
   open: boolean;
   onClose: () => void;
+  onPrev: () => void;
+  onNext: () => void;
   imageSrc: string;
   link: string;
   title: string;
   desc: string;
-  detail:ReactNode;
-  imgPos?: ImgPos;
-  imgFit?: ImgFit;
+  detail: React.ReactNode;
+  imgPos?: 'object-top' | 'object-center' | 'object-left' | 'object-right';
+  imgFit?: 'cover' | 'contain';
 }) {
   useEffect(() => {
     if (!open) return;
-    const onKey = (e: KeyboardEvent) => e.key === "Escape" && onClose();
-    window.addEventListener("keydown", onKey);
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') onClose();
+      if (e.key === 'ArrowLeft') onPrev?.();
+      if (e.key === 'ArrowRight') onNext?.();
+    };
+    window.addEventListener('keydown', onKey);
     const prev = document.body.style.overflow;
-    document.body.style.overflow = "hidden";
+    document.body.style.overflow = 'hidden';
     return () => {
-      window.removeEventListener("keydown", onKey);
+      window.removeEventListener('keydown', onKey);
       document.body.style.overflow = prev;
     };
-  }, [open, onClose]);
+  }, [open, onClose, onPrev, onNext]);
 
   if (!open) return null;
 
@@ -114,42 +120,69 @@ function Modal({
                    border border-black/10 flex flex-col overflow-hidden font-gmarket font-semibold"
         onClick={(e) => e.stopPropagation()}
       >
-        {/* 닫기 버튼 */}
-        {/* <button
-          className="absolute top-3 right-3 w-8 h-8 grid place-items-center
-                     rounded-full text-gray-500 hover:text-black hover:bg-black/5"
-          onClick={onClose}
-          aria-label="close"
-        >
-          ✕
-        </button> */}
+        {/* ◀ 사이드 네비 버튼 */}
+{(onPrev || onNext) && (
+  <>
+    <button
+  onClick={onPrev}
+  className="hidden sm:flex items-center justify-center
+             absolute left-4 top-[56%] -translate-y-1/2 z-20
+             w-10 h-10 rounded-full
+             !bg-neutral-100 !text-gray-800 !border-neutral-300
+             shadow-md transition
+             focus:outline-none focus:ring-0"
+>
+  ‹
+</button>
+
+<button
+  onClick={onNext}
+  className="hidden sm:flex items-center justify-center
+             absolute right-4 top-[56%] -translate-y-1/2 z-20
+             w-10 h-10 rounded-full
+             !bg-neutral-100 !text-gray-800 !border-neutral-300
+             shadow-md transition
+             focus:outline-none focus:ring-0"
+>
+  ›
+</button>
+  </>
+)}
 
         {/* 1) 상단 이미지 */}
-        <div className="relative h-[220px] rounded-t-2xl overflow-hidden">
-          <img src={imageSrc} alt="" className={`block w-full h-full
-        ${imgFit === 'contain' ? 'object-contain' : 'object-cover'}
-        ${imgPos}`} loading="lazy" decoding="async" />
+        <div className="relative flex-none h-[240px] md:h-[280px] overflow-hidden">
+          <img
+            src={imageSrc}
+            alt=""
+            className={`block w-full h-full ${imgFit === 'contain' ? 'object-contain' : 'object-cover'} ${imgPos}`}
+            loading="lazy"
+            decoding="async"
+          />
         </div>
 
-        {/* 2) 본문(설명/상세/기능) */}
-        <div className="p-6 space-y-1 overflow-y-auto flex-1 max-h-[calc(90vh-220px)]
-             [scrollbar-width:thin] [&::-webkit-scrollbar]:w-2
-             [&::-webkit-scrollbar-thumb]:bg-gray-300 [&::-webkit-scrollbar-thumb]:rounded-full
-             [&::-webkit-scrollbar-track]:bg-gray-100">
-          <h2 className="text-xl md:text-2xl"><b>프로젝트 설명</b></h2>
-          {detail}
+        {/* 2) 본문 (스크롤 영역) */}
+        <div
+          className="p-6 overflow-y-auto flex-1
+                     [scrollbar-width:thin] [&::-webkit-scrollbar]:w-2
+                     [&::-webkit-scrollbar-thumb]:bg-gray-300 [&::-webkit-scrollbar-thumb]:rounded-full
+                     [&::-webkit-scrollbar-track]:bg-gray-100"
+        >
+          <div className="max-w-[80%] mx-auto text-[0.95rem] leading-relaxed">
+            <h2 className="text-xl md:text-2xl font-bold">프로젝트 설명</h2>
+            {detail}
 
-          {link && (
-            <a
-              href={link}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="mt-4 inline-flex items-center gap-2 px-3 py-2 rounded-lg
-                         bg-black/5 hover:bg-black/10 transition"
-            >
-              🔗 사이트 바로가기
-            </a>
-          )}
+            {link && (
+              <a
+                href={link}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="mt-4 inline-flex items-center gap-2 px-3 py-2 rounded-lg
+                           bg-black/5 hover:bg-black/10 transition"
+              >
+                🔗 사이트 바로가기
+              </a>
+            )}
+          </div>
         </div>
       </div>
     </div>,
@@ -167,10 +200,10 @@ function App() {
     detail: ReactNode | null;
     imgPos?: ImgPos;
     imgFit?: ImgFit;
-  }>({ open: false, imageSrc: "", link: "", title: "", desc: "",detail: null, imgPos: 'object-top',imgFit: 'cover',});
+  }>({ open: false, imageSrc: "", link: "", title: "", desc: "",detail: null as ReactNode | null, imgPos: 'object-top' as ImgPos,imgFit: 'cover' as ImgFit,});
 
   const projectRef = useRef<HTMLDivElement>(null);
-
+const [currentIndex, setCurrentIndex] = useState<number>(-1);
   const projects = [
     {
       title: "영어 회화 학습 서비스",
@@ -541,13 +574,41 @@ imgPos: 'object-center',
   imageSrc: string;
   tech: string[];
   bgColor: string;
-  detail: React.ReactNode;
+  detail: ReactNode;
   imgPos?: ImgPos;
   imgFit?: ImgFit;
 }>;
 
+const openFromIndex = (idx: number) => {
+    const p = projects[idx];
+    setCurrentIndex(idx);
+    setModal({
+      open: true,
+      imageSrc: p.imageSrc,
+      link: p.link,
+      title: p.title,
+      desc: p.desc,
+      detail: p.detail,
+      imgPos: p.imgPos ?? 'object-top',
+      imgFit: p.imgFit ?? 'cover',
+    });
+  };
+
+  const goPrev = () => {
+    if (projects.length === 0) return;
+    const next = (currentIndex - 1 + projects.length) % projects.length;
+    openFromIndex(next);
+  };
+  const goNext = () => {
+    if (projects.length === 0) return;
+    const next = (currentIndex + 1) % projects.length;
+    openFromIndex(next);
+  };
+
   const { ref: endRef, inView: endInView } =
   useInView<HTMLDivElement>({ threshold: 0, rootMargin: "0px 0px 40% 0px" });
+
+  const listRef = projectRef;
 
   return (
     <>
@@ -607,8 +668,13 @@ imgPos: 'object-center',
         카드를 눌러서 프로젝트의 세부사항을 확인해보세요
       </p>
 
-      <div ref={projectRef} className="relative flex flex-wrap px-6 md:px-12 gap-8 mb-16 pb-24 justify-center md:justify-start">
-  {projects.map((p) => (
+      <div
+  ref={projectRef}
+  className="grid ml-26 px-6 md:px-12 mb-16 pb-10
+             grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8"
+>
+              
+  {projects.map((p,i) => (
     <ProjectCard
       key={p.title}
       title={p.title}
@@ -617,20 +683,30 @@ imgPos: 'object-center',
       imageSrc={p.imageSrc}
       tech={p.tech}
       bgColor={p.bgColor}
-      onClick={() =>
-        setModal({
-          open: true,
-          imageSrc: p.imageSrc,
-          link: p.link,
-          title: p.title,
-          desc: p.desc,
-          detail: p.detail,
-          imgPos: p.imgPos,
-          imgFit:p.imgFit,
-        })
-      }
+      onClick={() => openFromIndex(i)}
     />
   ))}
+  {/* 왼쪽 이동 */}
+  <button
+    onClick={() => listRef.current?.scrollBy({ left: -320, behavior: "smooth" })}
+    className="hidden md:flex absolute left-2 top-1/2 -translate-y-1/2 z-10
+               w-9 h-9 items-center justify-center rounded-full bg-white/80
+               shadow hover:bg-white"
+    aria-label="이전 카드"
+  >
+    ‹
+  </button>
+
+  {/* 오른쪽 이동 */}
+  <button
+    onClick={() => listRef.current?.scrollBy({ left: 320, behavior: "smooth" })}
+    className="hidden md:flex absolute right-2 top-1/2 -translate-y-1/2 z-10
+               w-9 h-9 items-center justify-center rounded-full bg-white/80
+               shadow hover:bg-white"
+    aria-label="다음 카드"
+  >
+    ›
+  </button>
   <div className="pointer-events-none absolute inset-x-0 bottom-0 h-16
                   bg-gradient-to-b from-transparent to-[#fffbe9]" />
 </div>
@@ -640,6 +716,8 @@ imgPos: 'object-center',
       <Modal
         open={modal.open}
         onClose={() => setModal((m) => ({ ...m, open: false }))}
+        onPrev={goPrev}
+        onNext={goNext}
         imageSrc={modal.imageSrc}
         link={modal.link}
         title={modal.title}
