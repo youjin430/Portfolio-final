@@ -125,7 +125,7 @@ function Modal({
   <>
     <button
   onClick={onPrev}
-  className="hidden sm:flex items-center justify-center
+  className="flex items-center justify-center
              absolute left-4 top-[56%] -translate-y-1/2 z-20
              w-10 h-10 rounded-full
              !bg-neutral-50 !text-gray-800 !border-neutral-300
@@ -140,7 +140,7 @@ function Modal({
 
 <button
   onClick={onNext}
-  className="hidden sm:flex items-center justify-center
+  className="flex items-center justify-center
              absolute right-4 top-[56%] -translate-y-1/2 z-20
              w-10 h-10 rounded-full
              !bg-neutral-50 !text-gray-800 !border-neutral-300
