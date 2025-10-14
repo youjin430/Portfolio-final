@@ -649,6 +649,17 @@ module.exports = {
       누구나 편하게 사용할 수 있는 서비스를 만드는 개발자가 되고 싶습니다.
     </p>
   </Reveal>
+  <Reveal delayMs={240}>
+    <a
+      href="https://portfolio-final-ecru.vercel.app/"
+      target="_blank"
+      rel="noopener noreferrer"
+      className="mt-8 inline-block px-5 py-2 text-lg font-medium text-gray-700
+                 border border-gray-300 rounded-lg hover:bg-gray-100 transition"
+    >
+      🌐 https://portfolio-final-ecru.vercel.app/
+    </a>
+  </Reveal>
 </section>
     </>
   );
