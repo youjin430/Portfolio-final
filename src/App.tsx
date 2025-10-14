@@ -614,7 +614,7 @@ const openFromIndex = (idx: number) => {
   const { ref: endRef, inView: endInView } =
   useInView<HTMLDivElement>({ threshold: 0, rootMargin: "0px 0px 40% 0px" });
 
-  const listRef = projectRef;
+  // const listRef = projectRef;
 
   return (
     <>
@@ -693,26 +693,7 @@ const openFromIndex = (idx: number) => {
     />
   ))}
   {/* 왼쪽 이동 */}
-  <button
-    onClick={() => listRef.current?.scrollBy({ left: -320, behavior: "smooth" })}
-    className="hidden md:flex absolute left-2 top-1/2 -translate-y-1/2 z-10
-               w-9 h-9 items-center justify-center rounded-full bg-white/80
-               shadow hover:bg-white"
-    aria-label="이전 카드"
-  >
-    ‹
-  </button>
-
-  {/* 오른쪽 이동 */}
-  <button
-    onClick={() => listRef.current?.scrollBy({ left: 320, behavior: "smooth" })}
-    className="hidden md:flex absolute right-2 top-1/2 -translate-y-1/2 z-10
-               w-9 h-9 items-center justify-center rounded-full bg-white/80
-               shadow hover:bg-white"
-    aria-label="다음 카드"
-  >
-    ›
-  </button>
+  
   <div className="pointer-events-none absolute inset-x-0 bottom-0 h-16
                   bg-gradient-to-b from-transparent to-[#fffbe9]" />
 </div>
