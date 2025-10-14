@@ -1,4 +1,4 @@
-import { PropsWithChildren } from "react";
+import type { PropsWithChildren } from "react";
 import { useInView } from "../hooks/useInView";
 
 type RevealProps = PropsWithChildren<{
