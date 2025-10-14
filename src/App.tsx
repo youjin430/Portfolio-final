@@ -1,6 +1,8 @@
 import { useState, useEffect, type ReactNode } from "react";
 import { createPortal } from "react-dom";
 import "./App.css";
+import Reveal from "./components/Reveal";
+import { useInView } from "./hooks/useInView";
 
 // 🧭 프로젝트 카드 컴포넌트
 type ProjectCardProps = {
@@ -521,6 +523,9 @@ module.exports = {
     },
   ];
 
+  const { ref: endRef, inView: endInView } =
+  useInView<HTMLDivElement>({ threshold: 0, rootMargin: "0px 0px 40% 0px" });
+
   return (
     <>
       {/* 🧍‍♀️ 소개 섹션 (생략 가능) */}
@@ -579,29 +584,33 @@ module.exports = {
         카드를 눌러서 프로젝트의 세부사항을 확인해보세요
       </p>
 
-      <div className="flex flex-wrap px-6 md:px-12 gap-8 mb-15 justify-center md:justify-start">
-        {projects.map((p) => (
-          <ProjectCard
-            key={p.title}
-            title={p.title}
-            desc={p.desc}
-            link={p.link}
-            imageSrc={p.imageSrc}
-            tech={p.tech}
-            bgColor={p.bgColor}
-            onClick={() =>
-              setModal({
-                open: true,
-                imageSrc: p.imageSrc,
-                link: p.link,
-                title: p.title,
-                desc: p.desc,
-                detail: p.detail,
-              })
-            }
-          />
-        ))}
-      </div>
+      <div className="relative flex flex-wrap px-6 md:px-12 gap-8 mb-16 pb-24 justify-center md:justify-start">
+  {projects.map((p) => (
+    <ProjectCard
+      key={p.title}
+      title={p.title}
+      desc={p.desc}
+      link={p.link}
+      imageSrc={p.imageSrc}
+      tech={p.tech}
+      bgColor={p.bgColor}
+      onClick={() =>
+        setModal({
+          open: true,
+          imageSrc: p.imageSrc,
+          link: p.link,
+          title: p.title,
+          desc: p.desc,
+          detail: p.detail,
+        })
+      }
+    />
+  ))}
+  <div className="pointer-events-none absolute inset-x-0 bottom-0 h-16
+                  bg-gradient-to-b from-transparent to-[#fffbe9]" />
+</div>
+
+      <div ref={endRef} aria-hidden className="h-10 w-full mt-4" />
 
       <Modal
         open={modal.open}
@@ -612,6 +621,33 @@ module.exports = {
         desc={modal.desc}
         detail={modal.detail}
       />
+
+        {/* 👋 Thank You Section */}
+<section
+  className={`relative flex flex-col items-center justify-center text-center
+              px-6 py-28 md:py-40 bg-[url('/marble.jpg')] bg-cover bg-center
+              transition-all duration-500
+              ${endInView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4 pointer-events-none"}`}
+>
+  <Reveal>
+    <h2 className="text-[48px] md:text-[120px] font-extrabold tracking-tight text-black/10 select-none">
+      Thank You
+    </h2>
+  </Reveal>
+  <Reveal delayMs={80}>
+    <p className="mt-[-24px] md:mt-[-60px] text-2xl md:text-4xl font-semibold">
+      봐주셔서 감사합니다 :)
+    </p>
+  </Reveal>
+  <Reveal delayMs={160}>
+    <p className="mt-4 max-w-2xl text-gray-600 leading-relaxed">
+      프론트엔드 개발자로 성장하는 과정에서 <b>사용자 경험을 세심하게 고민하고</b>,
+      기술적으로 완성도 있는 결과물을 만들기 위해 노력해왔습니다.
+      앞으로도 <b>더 나은 인터랙션과 디자인</b>을 구현하며,
+      누구나 편하게 사용할 수 있는 서비스를 만드는 개발자가 되고 싶습니다.
+    </p>
+  </Reveal>
+</section>
     </>
   );
 }
