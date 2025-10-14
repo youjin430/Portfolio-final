@@ -73,6 +73,8 @@ function Modal({
   // title,
   // desc,
   detail,
+  imgPos = 'object-top',
+  imgFit = 'cover',
 }: {
   open: boolean;
   onClose: () => void;
@@ -81,6 +83,8 @@ function Modal({
   title: string;
   desc: string;
   detail:ReactNode;
+  imgPos?: 'object-top' | 'object-center' | 'object-left' | 'object-right';
+  imgFit?: 'cover' | 'contain';
 }) {
   useEffect(() => {
     if (!open) return;
@@ -106,22 +110,24 @@ function Modal({
       <div
         className="relative w-[92vw] max-w-[800px] min-h-[70vh] max-h-[90vh]
                    bg-white rounded-2xl shadow-[0_10px_40px_rgba(0,0,0,0.35)]
-                   border border-black/10 flex flex-col font-gmarket font-semibold"
+                   border border-black/10 flex flex-col overflow-hidden font-gmarket font-semibold"
         onClick={(e) => e.stopPropagation()}
       >
         {/* 닫기 버튼 */}
-        <button
+        {/* <button
           className="absolute top-3 right-3 w-8 h-8 grid place-items-center
                      rounded-full text-gray-500 hover:text-black hover:bg-black/5"
           onClick={onClose}
           aria-label="close"
         >
           ✕
-        </button>
+        </button> */}
 
         {/* 1) 상단 이미지 */}
-        <div className="relative h-[220px]">
-          <img src={imageSrc} alt="" className="w-full h-full object-cover" />
+        <div className="relative h-[220px] rounded-t-2xl overflow-hidden">
+          <img src={imageSrc} alt="" className={`block w-full h-full
+        ${imgFit === 'contain' ? 'object-contain' : 'object-cover'}
+        ${imgPos}`} loading="lazy" decoding="async" />
         </div>
 
         {/* 2) 본문(설명/상세/기능) */}
@@ -158,7 +164,8 @@ function App() {
     title: string;
     desc: string;
     detail: ReactNode | null;
-  }>({ open: false, imageSrc: "", link: "", title: "", desc: "",detail: null, });
+    imgPos?: 'object-top' | 'object-center' | 'object-left' | 'object-right';
+  }>({ open: false, imageSrc: "", link: "", title: "", desc: "",detail: null, imgPos: 'object-top',});
 
   const projectRef = useRef<HTMLDivElement>(null);
 
@@ -259,6 +266,7 @@ function App() {
 </ul>
       </>
     ),
+    imgPos: 'object-top',
     },
     {
       title: "여행 일정 공유 커뮤니티",
@@ -276,23 +284,23 @@ function App() {
   <>
     <h3 className="mb-1">여행 일정을 공유하고 검색할 수 있는 커뮤니티</h3>
     <p className="text-gray-700 whitespace-pre-line mb-4">
-      사용자들이 자신의 여행 일정을 카드/캘린더 형태로 공유하고, 관심 지역·기간·태그로 손쉽게 검색할 수 있는 서비스입니다.
-      댓글/좋아요/스크랩과 팔로우 기반 알림으로 상호작용을 강화했습니다.
+      사용자들이 자신의 여행 일정을 카드 형태로 공유하고, 관심 지역·기간·태그로 손쉽게 이용할 수 있는 서비스입니다.
+      댓글/좋아요와 팔로우로 상호작용을 강화했습니다.
     </p>
 
     {/* 💡 주요 기능 및 특징 */}
     <h4 className="font-medium text-lg mb-2"><b>💡 주요 기능 및 특징</b></h4>
     <ul className="list-disc list-inside text-gray-700 space-y-1 mb-5">
-      <li><b>일정 공유</b> — 카드/캘린더 보기 지원, 태그·사진 첨부</li>
+      <li><b>일정 공유</b> — 카드 보기 지원, 태그·사진 첨부</li>
       <li><b>고급 검색</b> — 키워드·지역·기간·태그 복합 필터 및 정렬</li>
-      <li><b>알림</b> — 댓글/좋아요/팔로우 이벤트 실시간 드롭다운 알림</li>
-      <li><b>마이페이지</b> — 나의 일정/스크랩/활동 통계 확인</li>
+      <li><b>알림</b> — 좋아요 알림</li>
+      <li><b>마이페이지</b> — 팔로워/팔로잉/내 게시물 확인</li>
     </ul>
 
     {/* 👩‍💻 담당 역할 및 구현 */}
     <h4 className="font-medium text-lg mb-2"><b>👩‍💻 담당 역할 및 구현</b></h4>
     <ul className="list-disc list-inside text-gray-700 space-y-1 mb-5">
-      <li>마이페이지 UI/UX 구성(반응형 그리드, 접근성 고려 탭/카드)</li>
+      <li>마이페이지 UI/UX 구성</li>
       <li>검색 상태 전역 관리(Zustand) + <code>URLSearchParams</code> 동기화로 공유 가능한 검색 URL 구현</li>
       <li>알림 드롭다운/토스트 컴포넌트, 읽음 처리/페이징 및 무한 스크롤(<code>IntersectionObserver</code>)</li>
     </ul>
@@ -342,6 +350,7 @@ function App() {
     </ul>
   </>
 ),
+imgPos: 'object-center', imgFit: 'contain'
     },
     {
       title: "캠핑 통합 플랫폼",
@@ -357,9 +366,8 @@ function App() {
       bgColor: "bg-emerald-100",
       detail: (
   <>
-    <h3 className="mb-1">캠핑 정보를 모아 보고 예약까지 한 번에</h3>
     <p className="text-gray-700 whitespace-pre-line mb-4">
-      전국 캠핑장 정보를 검색/필터링하고 지도로 탐색하며, 외부 예약 링크로 빠르게 이동할 수 있는 통합 플랫폼입니다.
+      전국 캠핑장 정보를 검색/필터링하고 지도로 탐색할 수 있는 통합 플랫폼입니다.
       서비스명 <b>Tember</b>는 <b>Tent</b>와 불꽃을 뜻하는 <b>ember</b>의 합성어로, “텐트 위에서 타오르는 불”을
       떠올리게 하는 캠핑 이미지를 담았습니다.
     </p>
@@ -369,16 +377,15 @@ function App() {
     <ul className="list-disc list-inside text-gray-700 space-y-1 mb-5">
       <li><b>OAuth 로그인</b> — Google 계정으로 간편 인증</li>
       <li><b>통합 검색</b> — 키워드/지역/테마/편의시설/가격대 복합 필터</li>
-      <li><b>지도 탐색</b> — 지도 범위 내 결과만 보기 &amp; 클러스터링</li>
       <li><b>챗봇</b> — 예약/장비/주의사항 등 FAQ 대화 플로우 제공</li>
     </ul>
 
     {/* 👩‍💻 담당 역할 및 구현 */}
     <h4 className="font-medium text-lg mb-2"><b>👩‍💻 담당 역할 및 구현</b></h4>
     <ul className="list-disc list-inside text-gray-700 space-y-1 mb-5">
-      <li>Google OAuth 연동(상태 토큰/nonce 검증, 토큰 갱신/만료 처리)</li>
-      <li>헤더 검색·필터링 컴포넌트(멀티셀렉트, 접근성 고려 키보드 내비게이션)</li>
-      <li>챗봇 시나리오(FAQ 트리·가이드 플로우, 퀵 액션 버튼) 설계/구현</li>
+      <li>Google OAuth 연동</li>
+      <li>헤더 검색·필터링 컴포넌트</li>
+      <li>챗봇 설계/구현</li>
     </ul>
 
     {/* ⚙️ 트러블슈팅 */}
@@ -424,6 +431,7 @@ function App() {
     </ul>
   </>
 ),
+imgPos: 'object-top',
     },
     {
       title: "AI 기반 여가생활 추천 서비스",
@@ -522,6 +530,7 @@ module.exports = {
 </ul>
   </>
 ),
+imgPos: 'object-center',
     },
   ];
 
@@ -604,6 +613,8 @@ module.exports = {
           title: p.title,
           desc: p.desc,
           detail: p.detail,
+          imgPos: p.imgPos,
+          imgFit:p.imgFit,
         })
       }
     />
@@ -622,6 +633,8 @@ module.exports = {
         title={modal.title}
         desc={modal.desc}
         detail={modal.detail}
+        imgPos={modal.imgPos}
+        imgFit={modal.imgFit}
       />
 
         {/* 👋 Thank You Section */}
