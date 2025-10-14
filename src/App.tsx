@@ -106,7 +106,7 @@ function Modal({
       <div
         className="relative w-[92vw] max-w-[800px] min-h-[70vh] max-h-[90vh]
                    bg-white rounded-2xl shadow-[0_10px_40px_rgba(0,0,0,0.35)]
-                   border border-black/10 flex flex-col"
+                   border border-black/10 flex flex-col font-gmarket"
         onClick={(e) => e.stopPropagation()}
       >
         {/* 닫기 버튼 */}
@@ -642,7 +642,7 @@ module.exports = {
     </p>
   </Reveal>
   <Reveal delayMs={160}>
-    <p className="mt-4 max-w-2xl text-gray-600 leading-relaxed">
+    <p className="mt-4 max-w-2xl text-gray-600 leading-relaxed font-gmarket">
       프론트엔드 개발자로 성장하는 과정에서 <b>사용자 경험을 세심하게 고민하고</b>,
       기술적으로 완성도 있는 결과물을 만들기 위해 노력해왔습니다.
       앞으로도 <b>더 나은 인터랙션과 디자인</b>을 구현하며,
