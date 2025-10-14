@@ -128,11 +128,14 @@ function Modal({
   className="hidden sm:flex items-center justify-center
              absolute left-4 top-[56%] -translate-y-1/2 z-20
              w-10 h-10 rounded-full
-             !bg-neutral-100 !text-gray-800 !border-neutral-300
-             shadow-md transition
-             focus:outline-none focus:ring-0"
+             !bg-neutral-50 !text-gray-800 !border-neutral-300
+             hover:!bg-neutral-100 active:scale-95
+             shadow-[0_1px_4px_rgba(0,0,0,0.08)]
+             transition
+             focus:outline-none focus:ring-0
+             text-[22px] font-light"
 >
-  ‹
+  {'‹'}
 </button>
 
 <button
@@ -140,11 +143,14 @@ function Modal({
   className="hidden sm:flex items-center justify-center
              absolute right-4 top-[56%] -translate-y-1/2 z-20
              w-10 h-10 rounded-full
-             !bg-neutral-100 !text-gray-800 !border-neutral-300
-             shadow-md transition
-             focus:outline-none focus:ring-0"
+             !bg-neutral-50 !text-gray-800 !border-neutral-300
+             hover:!bg-neutral-100 active:scale-95
+             shadow-[0_1px_4px_rgba(0,0,0,0.08)]
+             transition
+             focus:outline-none focus:ring-0
+             text-[22px] font-light"
 >
-  ›
+  {'›'}
 </button>
   </>
 )}
