@@ -79,8 +79,8 @@ function Modal({
 }: {
   open: boolean;
   onClose: () => void;
-  onPrev: () => void;
-  onNext: () => void;
+  onPrev?: () => void;
+  onNext?: () => void;
   imageSrc: string;
   link: string;
   title: string;
