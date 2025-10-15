@@ -213,7 +213,11 @@ const [currentIndex, setCurrentIndex] = useState<number>(-1);
   const projects = [
     {
       title: "영어 회화 학습 서비스",
-      desc: "😀 FE 2명, BE 1명\n🫡 기여: 퍼블리싱, 콘텐츠 제작",
+      desc:
+  "😀 FE 2명, BE 1명\n" +
+  "🫡 기여: 퍼블리싱, 콘텐츠 제작\n" +
+  "🏆 2024 이브와 최우수상 수상\n" +
+  "🌟 AWS 무료 사용 기간 종료 후 과금이 발생하여 현재는 서버를 중단했으며, 필요 시 즉시 재배포 가능한 상태로 유지하고 있습니다. (2025.10)",
       link: "https://growengup.com/home.php",
       imageSrc: "/growengup.png",
       tech: [
