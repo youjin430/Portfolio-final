@@ -623,7 +623,13 @@ const openFromIndex = (idx: number) => {
   return (
     <>
       {/* 🧍‍♀️ 소개 섹션 (생략 가능) */}
-      <div className="ml-26 flex flex-col md:flex-row items-center px-6 md:px-12 min-h-screen gap-8">
+      <div
+  className="
+    flex flex-col md:flex-row items-center
+    px-6 md:px-12 min-h-screen gap-8
+    mx-auto md:mx-0 md:ml-26
+  "
+>
         <img src="/유진.png" className="w-[200px] md:w-[250px]" />
         <div className="flex flex-col items-start text-center md:text-left">
           <h1 className="text-3xl md:text-5xl font-bold leading-snug">
@@ -643,7 +649,14 @@ const openFromIndex = (idx: number) => {
       </div>
 
       {/* 💻 Skills / Tools */}
-      <div className="ml-26 px-6 md:px-12 mb-20 text-2xl md:text-3xl flex flex-col md:flex-row gap-12">
+      <div
+  className="
+    px-6 md:px-12 mb-20
+    text-2xl md:text-3xl
+    flex flex-col md:flex-row gap-12
+    mx-auto md:mx-0 md:ml-26
+  "
+>
         <section>
           <h2 className="mb-3 font-semibold border-b-2 border-amber-300 inline-block">
             Skills
@@ -673,15 +686,33 @@ const openFromIndex = (idx: number) => {
       </div>
 
       {/* 🧱 Projects */}
-      <div className="ml-26 px-6 md:px-12 text-3xl font-bold mb-5">Project</div>
-      <p className="ml-26 px-6 md:px-12 text-base md:text-lg text-gray-600 mb-4">
-        카드를 눌러서 프로젝트의 세부사항을 확인해보세요
-      </p>
+      <div
+  className="
+    px-6 md:px-12 text-3xl font-bold mb-5
+    text-center md:text-left
+    mx-auto md:mx-0 md:ml-26
+  "
+>
+  Project
+</div>
+
+<p
+  className="
+    px-6 md:px-12 text-base md:text-lg text-gray-600 mb-4
+    text-center md:text-left
+    mx-auto md:mx-0 md:ml-26
+  "
+>
+  카드를 눌러서 프로젝트의 세부사항을 확인해보세요
+</p>
 
       <div
   ref={projectRef}
-  className="grid ml-26 px-6 md:px-12 mb-16 pb-10
-             grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8"
+  className="
+    grid px-6 md:px-12 mb-16 pb-10
+    grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8
+    mx-auto md:mx-0 md:ml-26
+  "
 >
               
   {projects.map((p,i) => (
