@@ -622,12 +622,14 @@ const openFromIndex = (idx: number) => {
 
   return (
     <>
+    <div className="max-w-[1200px] mx-auto px-6 md:px-12">
       {/* 🧍‍♀️ 소개 섹션 (생략 가능) */}
       <div
   className="
+  w-full
     flex flex-col md:flex-row items-center
     px-6 md:px-12 min-h-screen gap-8
-    mx-auto md:mx-0 md:ml-26
+    mx-auto md:mx-0 md:
   "
 >
         <img src="/유진.png" className="w-[200px] md:w-[250px]" />
@@ -650,11 +652,11 @@ const openFromIndex = (idx: number) => {
 
       {/* 💻 Skills / Tools */}
       <div
-  className="
+  className="w-full
     px-6 md:px-12 mb-20
     text-2xl md:text-3xl
     flex flex-col md:flex-row gap-12
-    mx-auto md:mx-0 md:ml-26
+    mx-auto md:mx-0 md:
   "
 >
         <section>
@@ -687,10 +689,10 @@ const openFromIndex = (idx: number) => {
 
       {/* 🧱 Projects */}
       <div
-  className="
+  className="w-full
     px-6 md:px-12 text-3xl font-bold mb-5
     text-center md:text-left
-    mx-auto md:mx-0 md:ml-26
+    mx-auto md:mx-0 md:
   "
 >
   Project
@@ -700,7 +702,7 @@ const openFromIndex = (idx: number) => {
   className="
     px-6 md:px-12 text-base md:text-lg text-gray-600 mb-4
     text-center md:text-left
-    mx-auto md:mx-0 md:ml-26
+    mx-auto md:mx-0 md:
   "
 >
   카드를 눌러서 프로젝트의 세부사항을 확인해보세요
@@ -708,10 +710,10 @@ const openFromIndex = (idx: number) => {
 
       <div
   ref={projectRef}
-  className="
+  className="w-full
     grid px-6 md:px-12 mb-16 pb-10
-    grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8
-    mx-auto md:mx-0 md:ml-26
+    grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-32 gap-y-18
+    mx-auto md:mx-0 md: relative
   "
 >
               
@@ -785,7 +787,7 @@ const openFromIndex = (idx: number) => {
       🌐 https://portfolio-final-ecru.vercel.app/
     </a>
   </Reveal>
-</section>
+</section></div>
     </>
   );
 }
